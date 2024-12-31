@@ -6,8 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Bookmark List</title>
-    <!-- Add Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <body>
@@ -15,11 +15,10 @@
         <h1 class="text-center mb-4">List of Bookmarks</h1>
         <div class="mb-4 d-flex justify-content-between align-items-center">
             <a href="{{ route('bookmark.create') }}" class="btn btn-dark">Add Bookmark</a>
-            <form action="{{ route('bookmark.search') }}" method="get" class="d-flex">
-                @csrf
-                <input type="text" id="search" name="search" class="form-control me-2" placeholder="Enter category">
-                <button type="submit" class="btn btn-primary">Submit</button>
-            </form>
+            <div class="d-flex">
+                <input type="text" id="search" name="search" class="form-control me-2"
+                    placeholder="Enter category">
+            </div>
         </div>
         <table class="table table-striped table-bordered">
             <thead class="table-dark">
@@ -37,16 +36,74 @@
                         <td><a href="{{ $bookmark->url }}" target="_blank">{{ $bookmark->url }}</a></td>
                         <td>{{ $bookmark->category }}</td>
                         <td>
-                            <a href="{{ route('bookmark.edit', $bookmark->id) }}" class="btn btn-warning btn-sm">Edit</a>
-                            <a href="{{ route('bookmark.delete', $bookmark->id) }}" class="btn btn-danger btn-sm">Delete</a>
+                            <a href="{{ route('bookmark.edit', $bookmark->id) }}"
+                                class="btn btn-warning btn-sm">Edit</a>
+                            <a href="#" onclick="confirmDelete({{ $bookmark->id }})"
+                                class="btn btn-danger btn-sm">Delete</a>
                         </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
+        <nav aria-label="Page navigation">
+            {{ $bookmarks->links('pagination::bootstrap-4') }}
+        </nav>
     </div>
-    <!-- Add Bootstrap JS Bundle -->
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const deleteUrl = "{{ route('bookmark.delete', ':id') }}";
+
+        function confirmDelete(bookmarkId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const url = deleteUrl.replace(':id', bookmarkId);
+                    window.location.href = url;
+                }
+            });
+        }
+        $(document).ready(function() {
+            $('#search').on('change', function(e) {
+                var category = $('#search').val();
+                $.ajax({
+                    url: "{{ route('bookmark.list') }}/" + category,
+                    type: "GET",
+                    success: function(response) {
+                        updateTable(response.data);
+                    },
+                    error: function(xhr) {
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+            function updateTable(data) {
+                var tbody = $('table tbody');
+                tbody.empty();
+                data.forEach(function(bookmark) {
+                    var row = `<tr>
+                    <td>${bookmark.title}</td>
+                    <td><a href="${bookmark.url}" target="_blank">${bookmark.url}</a></td>
+                    <td>${bookmark.category}</td>
+                    <td>
+                        <a href="/bookmark/edit/${bookmark.id}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="#" onclick="confirmDelete(${bookmark.id})" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>`;
+                    tbody.append(row);
+                });
+            }
+        });
+    </script>
 </body>
 
 </html>

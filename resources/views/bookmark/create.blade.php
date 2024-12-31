@@ -16,16 +16,25 @@
         <form action="{{ route('bookmark.store') }}" method="post" class="mx-auto" style="max-width: 600px;">
             @csrf
             <div class="mb-3">
-                <label for="title" class="form-label">Title</label>
-                <input type="text" name="title" id="title" class="form-control" placeholder="Enter title" required>
+                <label for="title" class="form-label">Title *</label>
+                <input type="text" name="title" id="title" class="form-control" placeholder="Enter title" value="{{ old('title') }}">
+                @error('title')
+                    <div>{{$message}}</div>
+                @enderror
             </div>
             <div class="mb-3">
-                <label for="url" class="form-label">URL</label>
-                <input type="text" name="url" id="url" class="form-control" placeholder="Enter URL" required>
+                <label for="url" class="form-label">URL *</label>
+                <input type="text" name="url" id="url" class="form-control" placeholder="Enter URL" value="{{ old('url') }}">
+                @error('url')
+                    <div>{{$message}}</div>
+                @enderror
             </div>
             <div class="mb-3">
-                <label for="category" class="form-label">Category</label>
-                <input type="text" name="category" id="category" class="form-control" placeholder="Enter category" required>
+                <label for="category" class="form-label">Category *</label>
+                <input type="text" name="category" id="category" class="form-control" placeholder="Enter category" value="{{ old('category') }}">
+                @error('category')
+                    <div>{{$message}}</div>
+                @enderror
             </div>
             <button type="submit" class="btn btn-primary w-100">Submit</button>
         </form>

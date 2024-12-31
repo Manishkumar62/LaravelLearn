@@ -18,15 +18,24 @@
             <input type="hidden" name="id" value="{{ $data->id }}">
             <div class="mb-3">
                 <label for="title" class="form-label">Title</label>
-                <input type="text" name="title" id="title" class="form-control" value="{{ $data->title }}" required>
+                <input type="text" name="title" id="title" class="form-control" value="{{ $data->title }}">
+                @error('title')
+                    <div>{{$message}}</div>
+                @enderror
             </div>
             <div class="mb-3">
                 <label for="url" class="form-label">URL</label>
-                <input type="text" name="url" id="url" class="form-control" value="{{ $data->url }}" required>
+                <input type="text" name="url" id="url" class="form-control" value="{{ $data->url }}">
+                @error('url')
+                    <div>{{$message}}</div>
+                @enderror
             </div>
             <div class="mb-3">
                 <label for="category" class="form-label">Category</label>
-                <input type="text" name="category" id="category" class="form-control" value="{{ $data->category }}" required>
+                <input type="text" name="category" id="category" class="form-control" value="{{ $data->category }}">
+                @error('category')
+                    <div>{{$message}}</div>
+                @enderror
             </div>
             <button type="submit" class="btn btn-primary w-100">Update</button>
         </form>
