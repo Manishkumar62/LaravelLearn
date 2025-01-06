@@ -3,13 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookMark;
+use App\Models\Category;
 use Illuminate\Http\Request;
 
 class BookmarkController extends Controller
 {
     public function create()
     {
-        return view('bookmark.create');
+        $categories = Category::all(); // Fetch all categories
+        return view('bookmark.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -18,13 +20,13 @@ class BookmarkController extends Controller
         $validatedData = $request->validate([
             'title' => 'required|string|max:20',
             'url' => 'required|url',
-            'category' => 'required|string|max:20',
+            'category_id' => 'required|exists:categories,id',
         ]);
 
         BookMark::create([
             'title' => $validatedData['title'],
             'url' => $validatedData['url'],
-            'category' => $validatedData['category'],
+            'category_id' => $validatedData['category_id'],
         ]);
 
         return redirect()->route('bookmark.list');
@@ -35,9 +37,14 @@ class BookmarkController extends Controller
         // if ($category != null) {
 
             if (request()->ajax()) {
-                $bookmarks = Bookmark::when($category, function($query) use($category){
-                    $query->where('category', 'like', "%$category%");
-                })->paginate(5);
+                $bookmarks = BookMark::with(['category'])
+                ->whereHas('category', function($query) use ($category) {
+                    $query->where('name', 'like', "%$category%");
+                })
+                ->paginate(5);
+                // $bookmarks = Bookmark::when($category, function($query) use($category){
+                //     $query->where('name', 'like', "%$category%");
+                // })->paginate(5);
                 return response()->json($bookmarks);
             }
         // }
@@ -47,7 +54,8 @@ class BookmarkController extends Controller
     public function edit($id = null)
     {
         $data = BookMark::findOrFail($id);
-        return view('bookmark.edit', compact('data'));
+        $categories = Category::all();
+        return view('bookmark.edit', compact('data', 'categories'));
     }
     public function update(Request $request)
     {

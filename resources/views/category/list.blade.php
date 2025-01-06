@@ -12,43 +12,32 @@
 
 <body>
     <div class="container py-5">
-        {{-- <h1 class="text-center mb-4">List of Bookmarks</h1> --}}
-        <div class="d-flex justify-content-between align-items-center mb-4 my-5">
-            <h1 class="text-center mb-4">List of Bookmarks</h1>
-            <form action="{{ route('logout') }}" method="POST">
-                @csrf
-                <button type="submit" class="btn btn-danger">Logout</button>
-            </form>
-        </div>
+        <h1 class="text-center mb-4">List of Category</h1>
         <div class="mb-4 d-flex justify-content-between align-items-center">
             <div>
-                <a href="{{ route('bookmark.create') }}" class="btn btn-dark">Add Bookmark</a>
-                <a href="{{ route('category.list') }}" class="btn btn-dark">Category List</a>
+                <a href="{{ route('category.create') }}" class="btn btn-dark">Add Category</a>
+                <a href="{{ route('bookmark.list') }}" class="btn btn-dark">Bookmark List</a>
             </div>
             <div class="d-flex">
                 <input type="text" id="search" name="search" class="form-control me-2"
-                    placeholder="Enter category">
+                    placeholder="Enter name">
             </div>
         </div>
         <table class="table table-striped table-bordered">
             <thead class="table-dark">
                 <tr>
-                    <th>Title</th>
-                    <th>URL</th>
-                    <th>Category</th>
+                    <th>Name</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($bookmarks as $bookmark)
+                @foreach ($categories as $category)
                     <tr>
-                        <td>{{ $bookmark->title }}</td>
-                        <td><a href="{{ $bookmark->url }}" target="_blank">{{ $bookmark->url }}</a></td>
-                        <td>{{ $bookmark->category->name }}</td>
+                        <td>{{ $category->name }}</td>
                         <td>
-                            <a href="{{ route('bookmark.edit', $bookmark->id) }}"
+                            <a href="{{ route('category.edit', $category->id) }}"
                                 class="btn btn-warning btn-sm">Edit</a>
-                            <a href="#" onclick="confirmDelete({{ $bookmark->id }})"
+                            <a href="#" onclick="confirmDelete({{ $category->id }})"
                                 class="btn btn-danger btn-sm">Delete</a>
                         </td>
                     </tr>
@@ -56,7 +45,7 @@
             </tbody>
         </table>
         <nav aria-label="Page navigation">
-            {{ $bookmarks->links('pagination::bootstrap-4') }}
+            {{ $categories->links('pagination::bootstrap-4') }}
         </nav>
     </div>
 
@@ -64,9 +53,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
-        const deleteUrl = "{{ route('bookmark.delete', ':id') }}";
+        const deleteUrl = "{{ route('category.delete', ':id') }}";
 
-        function confirmDelete(bookmarkId) {
+        function confirmDelete(categoryId) {
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -77,16 +66,16 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    const url = deleteUrl.replace(':id', bookmarkId);
+                    const url = deleteUrl.replace(':id', categoryId);
                     window.location.href = url;
                 }
             });
         }
         $(document).ready(function() {
             $('#search').on('change', function(e) {
-                var category = $('#search').val();
+                var name = $('#search').val();
                 $.ajax({
-                    url: "{{ route('bookmark.list') }}/" + category,
+                    url: "{{ route('category.list') }}/" + name,
                     type: "GET",
                     success: function(response) {
                         updateTable(response.data);
@@ -99,14 +88,12 @@
             function updateTable(data) {
                 var tbody = $('table tbody');
                 tbody.empty();
-                data.forEach(function(bookmark) {
+                data.forEach(function(category) {
                     var row = `<tr>
-                    <td>${bookmark.title}</td>
-                    <td><a href="${bookmark.url}" target="_blank">${bookmark.url}</a></td>
-                    <td>${bookmark.category.name}</td>
+                    <td>${category.name}</td>
                     <td>
-                        <a href="/bookmark/edit/${bookmark.id}" class="btn btn-warning btn-sm">Edit</a>
-                        <a href="#" onclick="confirmDelete(${bookmark.id})" class="btn btn-danger btn-sm">Delete</a>
+                        <a href="/category/edit/${category.id}" class="btn btn-warning btn-sm">Edit</a>
+                        <a href="#" onclick="confirmDelete(${category.id})" class="btn btn-danger btn-sm">Delete</a>
                     </td>
                 </tr>`;
                     tbody.append(row);

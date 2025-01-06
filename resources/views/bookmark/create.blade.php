@@ -31,9 +31,16 @@
             </div>
             <div class="mb-3">
                 <label for="category" class="form-label">Category *</label>
-                <input type="text" name="category" id="category" class="form-control" placeholder="Enter category" value="{{ old('category') }}">
-                @error('category')
-                    <div>{{$message}}</div>
+                <select name="category_id" id="category" class="form-control">
+                    <option value="">Select a category</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id')
+                    <div>{{ $message }}</div>
                 @enderror
             </div>
             <button type="submit" class="btn btn-primary w-100">Submit</button>

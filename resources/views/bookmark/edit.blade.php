@@ -32,7 +32,7 @@
             </div>
             <div class="mb-3">
                 <label for="category" class="form-label">Category</label>
-                <input type="text" name="category" id="category" class="form-control" value="{{ $data->category }}">
+                <input type="text" name="category" id="category" class="form-control" value="{{ $data->category->name }}">
                 @error('category')
                     <div>{{$message}}</div>
                 @enderror
