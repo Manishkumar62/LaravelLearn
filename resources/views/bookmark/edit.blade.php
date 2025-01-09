@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Update Bookmark</title>
-    <!-- Add Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-
+@section('content')
 <body>
     <div class="container py-5">
         <h1 class="text-center mb-4">Update Bookmark</h1>
@@ -32,8 +23,15 @@
             </div>
             <div class="mb-3">
                 <label for="category" class="form-label">Category</label>
-                <input type="text" name="category" id="category" class="form-control" value="{{ $data->category->name }}">
-                @error('category')
+                <select name="category_id" id="category" class="form-control">
+                    <option value="">Select a category</option>
+                    @foreach ($categories as $category)
+                        <option value="{{ $category->id }}" {{ $data->category_id == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+                @error('category_id')
                     <div>{{$message}}</div>
                 @enderror
             </div>
@@ -44,4 +42,4 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
-</html>
+@endsection

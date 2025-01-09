@@ -1,15 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
+@extends('layouts.layout')
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Bookmark List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-</head>
-
+@section('content')
 <body>
     <div class="container py-5">
         @if(session('error'))
@@ -20,15 +11,16 @@
         {{-- <h1 class="text-center mb-4">List of Bookmarks</h1> --}}
         <div class="d-flex justify-content-between align-items-center mb-4 my-5">
             <h1 class="text-center mb-4">List of Bookmarks</h1>
-            <form action="{{ route('logout') }}" method="POST">
+            {{-- <form action="{{ route('logout') }}" method="POST">
                 @csrf
                 <button type="submit" class="btn btn-danger">Logout</button>
-            </form>
+            </form> --}}
         </div>
         <div class="mb-4 d-flex justify-content-between align-items-center">
             <div>
                 <a href="{{ route('bookmark.create') }}" class="btn btn-dark">Add Bookmark</a>
-                <a href="{{ route('category.list') }}" class="btn btn-dark">Category List</a>
+                {{-- <a href="{{ route('category.list') }}" class="btn btn-dark">Category List</a> --}}
+                {{-- <a href="{{ route('user.list') }}" class="btn btn-dark">User List</a> --}}
             </div>
             <div class="d-flex">
                 <input type="text" id="search" name="search" class="form-control me-2"
@@ -131,5 +123,4 @@
         });
     </script>
 </body>
-
-</html>
+@endsection

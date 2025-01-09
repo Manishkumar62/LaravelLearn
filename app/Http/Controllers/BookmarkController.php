@@ -59,17 +59,18 @@ class BookmarkController extends Controller
     }
     public function update(Request $request)
     {
+        $id = $request->id;
         $validatedData = $request->validate([
             'title' => 'required|string|max:20',
             'url' => 'required|url',
-            'category' => 'required|string|max:20',
+            'category_id' => 'required|exists:categories,id',
         ]);
-        $id = $request->id;
+
         $data = BookMark::findOrFail($id);
         $data->update([
             'title' => $validatedData['title'],
             'url' => $validatedData['url'],
-            'category' => $validatedData['category'],
+            'category_id' => $validatedData['category_id'],
         ]);
         return redirect()->route('bookmark.list');
     }

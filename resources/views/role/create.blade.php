@@ -4,13 +4,13 @@
 
 <body>
     <div class="container py-5">
-        <h1 class="text-center mb-4">Create Category</h1>
-        <form action="{{ route('category.store') }}" method="post" class="mx-auto" style="max-width: 600px;">
+        <h1 class="text-center mb-4">Create Role</h1>
+        <form action="{{ route('role.store') }}" method="post" class="mx-auto" style="max-width: 600px;">
             @csrf
             <div class="mb-3">
-                <label for="name" class="form-label">Name *</label>
-                <input type="text" name="name" id="name" class="form-control" placeholder="Enter name" value="{{ old('name') }}">
-                @error('name')
+                <label for="name" class="form-label">Role *</label>
+                <input type="text" name="role" id="role" class="form-control" placeholder="Enter role" value="{{ old('role') }}">
+                @error('role')
                     <div>{{$message}}</div>
                 @enderror
             </div>
