@@ -27,15 +27,12 @@ class CategoryController extends Controller
     public function list($name = null)
     {
         $categories = Category::paginate(5);
-        // if ($category != null) {
-
-            if (request()->ajax()) {
-                $categories = Category::when($name, function($query) use($name){
-                    $query->where('name', 'like', "%$name%");
-                })->paginate(5);
-                return response()->json($categories);
-            }
-        // }
+        if (request()->ajax()) {
+            $categories = Category::when($name, function($query) use($name){
+                $query->where('name', 'like', "%$name%");
+            })->paginate(5);
+            return response()->json($categories);
+        }
         return view('category.list', compact('categories'));
     }
 

@@ -34,20 +34,15 @@ class BookmarkController extends Controller
     public function list($category = null)
     {
         $bookmarks = BookMark::paginate(5);
-        // if ($category != null) {
 
-            if (request()->ajax()) {
-                $bookmarks = BookMark::with(['category'])
-                ->whereHas('category', function($query) use ($category) {
-                    $query->where('name', 'like', "%$category%");
-                })
-                ->paginate(5);
-                // $bookmarks = Bookmark::when($category, function($query) use($category){
-                //     $query->where('name', 'like', "%$category%");
-                // })->paginate(5);
-                return response()->json($bookmarks);
-            }
-        // }
+        if (request()->ajax()) {
+            $bookmarks = BookMark::with(['category'])
+            ->whereHas('category', function($query) use ($category) {
+                $query->where('name', 'like', "%$category%");
+            })
+            ->paginate(5);
+            return response()->json($bookmarks);
+        }
         return view('bookmark.list', compact('bookmarks'));
     }
 

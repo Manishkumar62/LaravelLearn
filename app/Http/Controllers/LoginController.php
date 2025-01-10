@@ -21,11 +21,13 @@ class LoginController extends Controller
             'password' => ['required', 'string'],
         ]);
 
+
         if ($validator->fails()) {
             return redirect()->back()->withErrors($validator)->withInput();
         }
 
-        // dd($request->remember);
+        // dd(Auth::attempt(['email' => $request->email, 'password' => $request->password]));
+
 
         if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
             return redirect()->route('bookmark.list');

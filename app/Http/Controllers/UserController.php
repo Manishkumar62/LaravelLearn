@@ -16,22 +16,6 @@ class UserController extends Controller
         $users = User::with('roles')->paginate(10);
         $roles = Role::all(); // Fetch all available roles
         return view('user.list', compact('users', 'roles'));
-
-        // if ($category != null) {
-
-            // if (request()->ajax()) {
-            //     $bookmarks = BookMark::with(['category'])
-            //     ->whereHas('category', function($query) use ($category) {
-            //         $query->where('name', 'like', "%$category%");
-            //     })
-            //     ->paginate(5);
-            //     // $bookmarks = Bookmark::when($category, function($query) use($category){
-            //     //     $query->where('name', 'like', "%$category%");
-            //     // })->paginate(5);
-            //     return response()->json($bookmarks);
-            // }
-        // }
-        // return view('user.list', compact('users'));
     }
 
     public function assignRole(Request $request)

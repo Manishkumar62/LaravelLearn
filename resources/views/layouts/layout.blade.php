@@ -47,7 +47,24 @@
         </form>
     </div>
     <div class="content">
+        @if(session('error'))
+            <div id="error-alert" class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         @yield('content')
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if the error alert exists
+            const errorAlert = document.getElementById('error-alert');
+            if (errorAlert) {
+                // Hide the alert after 2 seconds (2000 milliseconds)
+                setTimeout(function() {
+                    errorAlert.style.display = 'none';
+                }, 2000);
+            }
+        });
+    </script>
 </body>
 </html>

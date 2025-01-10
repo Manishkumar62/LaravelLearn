@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\BookMark;
-use App\Models\Category;
+use App\Models\User;
 use App\Models\Role;
 use Illuminate\Http\Request;
 
@@ -20,7 +20,6 @@ class RoleController extends Controller
         $validatedData = $request->validate([
             'role' => 'required|string|max:20',
         ]);
-
         Role::create([
             'name' => $validatedData['role']
         ]);
@@ -34,4 +33,19 @@ class RoleController extends Controller
         return view('role.list', compact('roles'));
     }
 
+    public function remove(Request $request)
+    {
+        $request->validate([
+            'role_id' => 'required|exists:roles,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $role = Role::findOrFail($request->role_id);
+        $user = User::findOrFail($request->user_id);
+
+        // Detach the role from the user
+        $role->users()->detach($user->id);
+
+        return redirect()->route('role.list')->with('success', "User has been removed from the role.");
+    }
 }

@@ -16,8 +16,7 @@ class RoleMiddleware
     public function handle(Request $request, Closure $next, $role)
     {
         if (!$request->user() || !$request->user()->hasRole($role)) {
-            return back()->with('error', 'You do not have access to this page.');
-            // return back()->with('error', 'You are not authorized to delete bookmarks.');
+            return back()->with('error', 'You do not have access to this route.');
         }
 
         return $next($request);
